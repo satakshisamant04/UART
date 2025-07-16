@@ -1,58 +1,48 @@
-# UART Project – Verilog (Vivado)
+# UART Transmitter with Debouncing – Verilog (Basys 3, Vivado)
 
-This repository contains a UART (Universal Asynchronous Receiver/Transmitter) module implemented in Verilog using Xilinx Vivado. It enables serial communication by transmitting ASCII characters based on a configurable baud rate.
+This project implements a UART (Universal Asynchronous Receiver/Transmitter) transmitter in Verilog, with a debouncing circuit to enable clean button-triggered data transmission from an FPGA board.
 
-## 📁 Project Overview
+## 📌 Overview
 
-- **Project File**: `UART.xpr`
-- **Language**: Verilog HDL
-- **Tool**: Xilinx Vivado
-- **Core Modules**:
-  - Baud rate generator
-  - UART Transmitter (TX)
-  - UART Receiver (RX)
-  - Finite State Machines (FSMs)
-  - Counters and multiplexers
+- **Language**: Verilog HDL  
+- **Platform**: Basys 3 FPGA Board  
+- **Tool**: Xilinx Vivado  
+- **Features**:
+  - UART transmission using 8N1 format (8 data bits, no parity, 1 stop bit)
+  - Button debouncing to eliminate mechanical glitches
+  - Transmission of a fixed ASCII character ('S') upon each button press
 
-## 🛠 Features
+## 📁 Project Structure
 
-- Full UART transmission and reception for ASCII characters
-- FSM-based design architecture for transmission control
-- Baud rate generator for timing accuracy
-- Designed for FPGA implementation
-- Synchronous reset and positive-edge clocking
+├── transmitter.v # UART transmission logic
+├── transmit_debouncing.v # Button debounce module
+├── top.v # Top-level integration of TX and debounce
+├── Basys3_Master.xdc # Constraint file for pin mapping
+├── UART.xpr # Vivado project file
 
-## 📂 File Structure
 
-```
-UART/
-├── UART.xpr               # Vivado project file
-├── src/                   # Verilog source files (FSM, UART TX/RX, etc.)
-├── sim/                   # Testbench files
-└── constraints/           # XDC constraints for FPGA board
-```
+## 🛠 Key Modules
 
-## 🚀 How to Use
+- **transmitter.v**: Handles UART byte serialization using a state machine and controlled timing (via ticks).
+- **transmit_debouncing.v**: Eliminates button bounce by sampling input over time and issuing a single clean pulse.
+- **top.v**: Connects the modules and maps I/O for the Basys 3 board (button input and UART TX output).
 
-1. **Open Vivado**
-2. Navigate to `File → Open Project` and select `UART.xpr`
-3. Open the `src/` directory and review Verilog modules
-4. Run synthesis, implementation, and simulation as needed
-5. Use the testbench files in `sim/` to verify UART operation
+## ▶️ How to Run
 
-## ✅ Requirements
+1. Open the project in **Vivado** using `UART.xpr`.
+2. Synthesize and implement the design.
+3. Generate bitstream and program the Basys 3 board.
+4. Press the assigned button to transmit `'S'` over the UART TX line.
 
-- Xilinx Vivado (Version 2020.2 or later recommended)
-- FPGA development board (for hardware testing)
+## 🧰 Tools Required
+
+- Xilinx Vivado (2020.2 or later)
+- Basys 3 FPGA Board
 - UART serial monitor (e.g., Tera Term, PuTTY)
 
-## 🧪 Simulation
+## 📬 Output
 
-Simulation testbenches demonstrate:
-- Correct transmission of ASCII data
-- Timing accuracy at different baud rates
-- Behavior under reset conditions
+- Every button press sends the ASCII character `'S'` (0x53) over the UART line.
+- The transmission follows standard UART protocol: 1 start bit, 8 data bits, 1 stop bit.
 
-## ✍️ Authors
-
-- Satakshi Dhal Samanta (NIT Rourkela)
+## ✍️ Author- Satakshi Dhal Samanta (NIT Rourkela)
